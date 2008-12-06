@@ -21,13 +21,15 @@
   $.squidy = function(options) {
 
 		var defaults = {
-			tail_length : 15,
-			animation_interval	: 0.05
+			tail_length 				: 15,
+			animation_interval	: 0.05,
+			head_img						: '',
+			tail_img						: ''
 		}
 
 		opts = $.extend({}, defaults, options);
 
-		squid = new squidy(opts.tail_length, 'demo_head.gif', 'demo_tail.gif', 1.0 );
+		squid = new squidy(opts, 1.0 );
 
 		$.periodic( function(){squid.animate(); return true;}, {frequency: opts.animation_interval} );
 
@@ -57,12 +59,12 @@
 		return img;
 	}
 
-	function squidy( tail_length, head_img, tail_img, opacity ){
+	function squidy( opts, head_img, tail_img, opacity ){
 		this.followers = new Array();
-		this.followers[0] = create_layer( head_img, -200, 200, tail_length, opacity );
+		this.followers[0] = create_layer( opts.head_img, -200, 200, opts.tail_length, opacity );
 
-		for( i=1 ; i<tail_length ; i++){
-			this.followers[i] = create_layer( tail_img, -200, 200, tail_length-i, opacity );
+		for( i=1 ; i<opts.tail_length ; i++){
+			this.followers[i] = create_layer( opts.tail_img, -200, 200, opts.tail_length-i, opacity );
 		}
 
 		this.targetX	= 200;
