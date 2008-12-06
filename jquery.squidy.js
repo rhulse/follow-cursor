@@ -29,7 +29,7 @@
 
 		squid = new squidy(opts.tail_length, 'demo_head.gif', 'demo_tail.gif', 1.0 );
 
-		$.periodic( squid.animate(), {frequency: opts.animation_interval} );
+		$.periodic( function(){squid.animate(); return true;}, {frequency: opts.animation_interval} );
 
 		if( ! mouse_tracking ){
 			start_mouse_tracking();
@@ -85,7 +85,7 @@
 			offset = m.offset();
 			var X = (this.targetX - offset.left);
 			var Y = (this.targetY - offset.top);
-			var len = Math.sqrt(X*X+Y*Y);
+			var len = Math.sqrt(X*X+Y*Y) || 2;
 			var dx = 20 * (X/len);
 			var dy = 20 * (Y/len);
 			var ddx = (dx - this.dx)/10;
