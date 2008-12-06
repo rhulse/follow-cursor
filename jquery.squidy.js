@@ -33,6 +33,20 @@
 		return true;
 	}
 
+	function create_layer( img_src, x, y, zindex, opacity){
+		$('body').append('<img class="segment-' + zindex + '" />');
+		img = $('img.segment-' + zindex );
+		img.attr({ src: img_src, class: 'zindex' + zindex })
+					.css({
+						opacity	: opacity,
+						position: 'absolute',
+						top 		: x,
+					  left		: y,
+						zIndex	: zindex
+					});
+		return img;
+	}
+
   $.squidy.defaults = {
 		animation_interval	: 0.04
   };
