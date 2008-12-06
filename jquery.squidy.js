@@ -12,25 +12,35 @@
 
 (function($) {
 
-	// for tracking the current position of the mouse 
-	var mouse_x = 0, 
-			mouse_y = 0;
+	// for tracking the current position of the mouse
+	var mouse_x = 0,
+			mouse_y = 0,
+			mouse_tracking = false;
+
 
   $.squidy = function(options) {
 
-		var opts = $.extend({}, $.squidy.defaults, options);
+		var defaults = {
+			tail_length : 15,
+			animation_interval	: 0.05
+		}
 
-	  $().mousemove(function(e){
-			mouse_x = e.pageX;
-			mouse_y = e.pageY;
-	  });
+		opts = $.extend({}, defaults, options);
 
-    $.periodic( run_aminations, {frequency: opts.animation_interval} );
+		squid = new squidy(opts.tail_length, 'demo_head.gif', 'demo_tail.gif', 1.0 );
+
+		$.periodic( squid.animate(), {frequency: opts.animation_interval} );
+
+		if( ! mouse_tracking ){
+			start_mouse_tracking();
+		}
 	}
 
-	function run_aminations(){
-		$('#status').html( mouse_x + ', ' + mouse_y );
-		return true;
+	function start_mouse_tracking(){
+		$().mousemove(function(e){
+			mouse_x = e.pageX;
+			mouse_y = e.pageY;
+		});
 	}
 
 	function create_layer( img_src, x, y, zindex, opacity){
@@ -47,9 +57,50 @@
 		return img;
 	}
 
-  $.squidy.defaults = {
-		animation_interval	: 0.04
-  };
+	function squidy( tail_length, head_img, tail_img, opacity ){
+		this.followers = new Array();
+		this.followers[0] = create_layer( head_img, -200, 200, tail_length, opacity );
+
+		for( i=1 ; i<tail_length ; i++){
+			this.followers[i] = create_layer( tail_img, -200, 200, tail_length-i, opacity );
+		}
+
+		this.targetX	= 200;
+		this.targetY	= 200;
+		this.x		= -100;
+		this.y		= -100;
+		this.dx		= 0;
+		this.dy		= 0;
+
+		this.animate = function(){
+			var m, offset;
+			for( i=this.followers.length-1 ; i>0 ; i-- ){
+				// get the position of the next layer
+				offset = this.followers[i-1].offset();
+				offset.left += 0;
+				offset.top -= 2;
+				this.followers[i].css(offset);
+			}
+			m = this.followers[0];
+			offset = m.offset();
+			var X = (this.targetX - offset.left);
+			var Y = (this.targetY - offset.top);
+			var len = Math.sqrt(X*X+Y*Y);
+			var dx = 20 * (X/len);
+			var dy = 20 * (Y/len);
+			var ddx = (dx - this.dx)/10;
+			var ddy = (dy - this.dy)/10;
+			this.dx += ddx;
+			this.dy += ddy;
+			offset.left += this.dx;
+			offset.top += this.dy;
+
+			m.css( offset );
+			this.targetX = mouse_x - (m.width()  / 2) ;
+			this.targetY = mouse_y - (m.height() - 5);
+		}
+	}
+
 
 })(jQuery);
 
