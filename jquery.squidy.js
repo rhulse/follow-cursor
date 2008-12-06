@@ -29,7 +29,7 @@
 
 		opts = $.extend({}, defaults, options);
 
-		squid = new squidy(opts, 1.0 );
+		squid = new squidy(opts);
 
 		$.periodic( function(){squid.animate(); return true;}, {frequency: opts.animation_interval} );
 
@@ -59,12 +59,15 @@
 		return img;
 	}
 
-	function squidy( opts, head_img, tail_img, opacity ){
+	function squidy( opts, head_img, tail_img ){
+		var opacity = 100;
 		this.followers = new Array();
 		this.followers[0] = create_layer( opts.head_img, -200, 200, opts.tail_length, opacity );
 
+		var op = opacity - 20;
 		for( i=1 ; i<opts.tail_length ; i++){
-			this.followers[i] = create_layer( opts.tail_img, -200, 200, opts.tail_length-i, opacity );
+			op -= 5;
+			this.followers[i] = create_layer( opts.tail_img, -200, 200, opts.tail_length-i, op/100 );
 		}
 
 		this.targetX	= 200;
