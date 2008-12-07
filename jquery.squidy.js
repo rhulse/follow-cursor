@@ -25,7 +25,11 @@
 			animation_interval	: 0.05,
 			wobble							: 2,
 			head_img						: '',
-			tail_img						: ''
+			tail_img						: '',
+			tail_spacing_x			: 0,
+			tail_spacing_y			: 2,
+			tail_offset_x				: 0,
+			tail_offset_y				: 2,
 		}
 
 		opts = $.extend({}, defaults, options);
@@ -83,8 +87,10 @@
 			for( i=this.followers.length-1 ; i>0 ; i-- ){
 				// get the position of the next layer
 				offset = this.followers[i-1].offset();
-				offset.left += 0;
-				offset.top -= 2;
+				// allows us to set an offset on the tail
+				// this is useful if the tail graphic is smaller than the head
+				offset.left += (i != 1) ? opts.tail_spacing_x : opts.tail_offset_x;
+				offset.top	-= (i != 1) ? opts.tail_spacing_y : opts.tail_offset_y;
 				this.followers[i].css(offset);
 			}
 			m = this.followers[0];
