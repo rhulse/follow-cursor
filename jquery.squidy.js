@@ -48,7 +48,7 @@
 	function create_layer( img_src, x, y, zindex, opacity){
 		$('body').append('<img class="segment-' + zindex + '" />');
 		img = $('img.segment-' + zindex );
-		img.attr({ src: img_src, class: 'zindex' + zindex })
+		img.attr({ src: img_src })
 					.css({
 						opacity	: opacity,
 						position: 'absolute',
