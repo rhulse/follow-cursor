@@ -23,6 +23,7 @@
 		var defaults = {
 			tail_length 				: 15,
 			animation_interval	: 0.05,
+			wobble							: 2,
 			head_img						: '',
 			tail_img						: ''
 		}
@@ -101,8 +102,8 @@
 			offset.top += this.dy;
 
 			m.css( offset );
-			this.targetX = mouse_x - (m.width()  / 2) ;
-			this.targetY = mouse_y - (m.height() - 5);
+			this.targetX = mouse_x - (m.width()  / 2) + Math.floor(Math.random()*opts.wobble);
+			this.targetY = mouse_y - (m.height() - 5) + Math.floor(Math.random()*opts.wobble);
 		}
 	}
 
